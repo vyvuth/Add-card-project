@@ -43,8 +43,7 @@ function addProduct(){
   });
 }
 
-let listCart =[]
-
+let listCart = [];
 function checkCart(){
   var cookieValue = document.cookie
   .split(';')
@@ -59,7 +58,7 @@ function checkCart(){
 checkCart();
 
 function addToCart($proId){
- 
+  
   let productsCopy = JSON.parse(JSON.stringify(product));
   if(!listCart[$proId]){
     listCart[$proId] = productsCopy.filter(pro => pro.id === $proId)[0];
@@ -68,6 +67,7 @@ function addToCart($proId){
     listCart[$proId].quantity++;
   }
   document.cookie = "listCart=" + JSON.stringify(listCart) + "; expires=Thu, 31 Dec 2025 23:59:59 UTC; path=/;";
+  
   addCartToHTML();
 }
 
@@ -90,9 +90,9 @@ function addCartToHTML(){
                     <div class="price">${product.price}</div>
                 </div>
                 <div class="quantity">
-                    <button onclick = 'changeQuantity(${product.id, '-'})'>-</button>
+                    <button onclick= "changeQuantity(${product.id}, '-')">-</button>
                     <span class="value">${product.quantity}</span>
-                    <button onclick = 'changeQuantity(${product.id}, '+')'>+</button>
+                    <button onclick= "changeQuantity(${product.id}, '+')">+</button>
                 </div>`
       
       listCartHTML.appendChild(newCart);
@@ -102,6 +102,24 @@ function addCartToHTML(){
   totalHTML.innerText = totalQuantity
 }
 
+function changeQuantity($id, $type){
+  switch($type){
+    case '+':{
+      listCart[$id].quantity++;
+      
+    }break;
+    case '-':{
+      listCart[$id].quantity--;
+      if(listCart[$id].quantity <= 0){
+        delete listCart[$id];
+      }
+    }break;
+    default:
+    break;
+  }
+  document.cookie = "listCart=" + JSON.stringify(listCart) + "; expires=Thu, 31 Dec 2025 23:59:59 UTC; path=/;";
+  addCartToHTML();
+}
 
 
 
